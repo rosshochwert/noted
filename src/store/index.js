@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import {Howl} from 'howler';
 import { firestorePlugin } from 'vuefire'
-import { db } from '../main.js'
-import song_json from '../assets/music/songs.json'
+import { db } from '../db.js'
+import song_json from '../assets/music/songs_2.json'
+import firebase from 'firebase'
 
 Vue.use(Vuex);
 Vue.use(firestorePlugin)
@@ -18,7 +19,9 @@ const store = new Vuex.Store({
 			isPlaying: false,
 			isLoaded: false,
 			isPaused: false,
-			currentSong: {name: '', copyright: ''}
+			currentSong: {name: '', copyright: '', firestore_link: ''},
+			length: 0,
+			elapsed: 0
 		},
 		user: {
 			first: ''
@@ -56,6 +59,12 @@ const store = new Vuex.Store({
 			state.loggedIn = data;
 		},
 		play(state, path){
+			try {
+				state.sound.stop();
+			} catch (e) {
+				//console.log(e);
+			}
+
 			state.sound = new Howl({
 				src: path,
 				html5: true,
@@ -66,14 +75,20 @@ const store = new Vuex.Store({
 				onplayerror: function(id, error){
 					console.log(error)
 				},
+				onload: function(){
+					console.log("song has loaded")
+				},
 				onplay: function(){
+					console.log("successfully played")
+					state.player.length = state.sound.duration();
+					state.player.isPlaying = true;
+					state.player.isLoading = false;
 					return true;
 				}
 			});
 
 			state.sound.play();
-			state.player.isPlaying = true;
-			state.player.isLoading = false;
+
 		}
 	},
 	actions: {
@@ -81,7 +96,7 @@ const store = new Vuex.Store({
 			if (context.state.player.isPlaying){
 				var sound = context.state.sound;
 				var seek = sound.seek() || 0;
-				console.log(seek);
+				context.state.player.elapsed = seek
 			}
 		},
 		initializePlayer (context) {
@@ -89,12 +104,14 @@ const store = new Vuex.Store({
 			var path = require('@/assets/music/Overture to the Marriage of Figaro - Brass quintet.mp3')
 			context.commit('play', path);
 		},
-		playSong (context, random){
-			if (random){
-				//tbd
-			} else {
-				//tbd
-			}
+		playSong (context, song){
+			context.commit('load');
+			context.state.player.currentSong = song
+			var firestore_link = song.firestore_link
+			var storageRef = firebase.storage().ref();
+			storageRef.child('songs/' + firestore_link).getDownloadURL().then(function(url){
+				context.commit('play', url);
+			})
 		},
 		playRandomSong (context) {
 			context.commit('reset');
@@ -120,6 +137,11 @@ const store = new Vuex.Store({
 				context.state.history.pop()	
 			}
 
+		},
+		skip30(context){
+			var sound = context.state.sound;
+			sound.seek(sound.seek()+30)
+			context.state.player.elapsed = sound.seek()
 		},
 		fetchUser (context, user) {
 			if (user) {

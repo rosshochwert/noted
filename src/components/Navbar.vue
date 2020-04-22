@@ -8,7 +8,10 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item active">
-						<router-link to="/"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></router-link>
+						<router-link to="/meditate"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></router-link>
+					</li>
+					<li class="nav-item active" v-if="this.$store.state.loggedIn">
+						<router-link to="/library"><a class="nav-link" href="#">Library</a></router-link>
 					</li>
 				</ul>
 				<ul class="navbar-nav" v-if="!this.$store.state.loggedIn">
