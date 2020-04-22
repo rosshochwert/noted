@@ -50,7 +50,10 @@ let router = new VueRouter({
     {
       path:'/library',
       name: "Library",
-      component: Library
+      component: Library,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })

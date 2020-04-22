@@ -51,7 +51,7 @@
 		methods: {
 			login () {
 				firebase.auth().signInWithEmailAndPassword(this.email, this.password).then((user) => {
-					this.$router.replace('/dashboard')
+					this.$router.replace('/library')
 					user
 				}).catch((err) => {
 					alert(err.message)

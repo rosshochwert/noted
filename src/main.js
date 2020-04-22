@@ -1,3 +1,5 @@
+window.$ = window.jQuery = require('jquery');
+
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -19,7 +21,6 @@ import './filters/index.js'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
-window.$ = window.jQuery = require('jquery');
 
 // Install BootstrapVue and Icons
 Vue.use(BootstrapVue)

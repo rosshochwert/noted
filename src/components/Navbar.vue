@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nav class="navbar navbar-expand-sm fixed-top navbar-light" v-bind:class="{'scrolled': scrolled}" id="navbar">
+		<nav class="navbar navbar-expand-sm static-top navbar-light" v-bind:class="{'scrolled': scrolled}" id="navbar">
 			<router-link to="/"><a class="navbar-brand" href="#">Noted</a></router-link>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -76,14 +76,16 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
-  -webkit-transition:all 0.6s ease-out;
-  -moz-transition:all 0.6s ease-out;  
-  -o-transition:all 0.6s ease-out;         
-  transition:all 0.6s ease-out;
-}
 
-.navbar.scrolled {
-  background-color: #fff;
-}
+/* Desktop */
+	.navbar {
+		-webkit-transition:all 0.6s ease-out;
+		-moz-transition:all 0.6s ease-out;  
+		-o-transition:all 0.6s ease-out;         
+		transition:all 0.6s ease-out;
+	}
+
+	.navbar.scrolled {
+		background-color: #fff;
+	}
 </style>

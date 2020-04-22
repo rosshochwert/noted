@@ -82,6 +82,7 @@ const store = new Vuex.Store({
 					console.log("successfully played")
 					state.player.length = state.sound.duration();
 					state.player.isPlaying = true;
+					state.player.isPaused = false;
 					state.player.isLoading = false;
 					return true;
 				}
